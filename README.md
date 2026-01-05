@@ -1,246 +1,208 @@
-# 📌 FIRST PROJECT: Mini Marketplace (Python ORM)
+📌 FIRST PROJECT: Mini Marketplace (Python + SQLAlchemy ORM) – Mukammal Versiya
+🎯 Loyihaning maqsadi
 
-## 🎯 Loyihaning maqsadi
+Bu loyiha Python + SQLAlchemy ORM yordamida yaratiladi. Siz:
 
-Bu loyiha **Python + SQLAlchemy ORM** yordamida quriladigan
-**oddiy marketplace ma’lumotlar bazasi**.
+ORM bilan ishlashni amaliy o‘rganasiz
 
-Loyihaning asosiy maqsadi:
+Jadvallar va ularning bog‘lanishlarini tushunasiz
 
-* ORM bilan ishlashni o‘rganish
-* jadvallar o‘rtasidagi bog‘lanishlarni tushunish
-* real hayotdagi marketplace logikasini tushunish
+Real hayotdagi marketplace logikasini kodga o‘tkazasiz
 
----
+💡 Junior-friendly: Bu loyiha database → model → service → business logic → API-ready structure ni tushunishga yordam beradi.
 
-## 👤 Foydalanuvchi rollari
+👤 Foydalanuvchi rollari
+1️⃣ SELLER (Sotuvchi)
 
-Tizimda **ikki xil foydalanuvchi** mavjud:
+O‘z do‘koniga ega
 
-### 1. SELLER (Sotuvchi)
+Mahsulot qo‘shadi
 
-* O‘z do‘koniga ega
-* Mahsulot qo‘sha oladi
-* Mahsulotga quyidagilarni kiritadi:
+Mahsulot maydonlari:
 
-  * nomi
-  * narxi
-  * kategoriyasi
-  * description
-  * stock (soni)
+nomi
 
-### 2. CUSTOMER (Xaridor)
+narxi
 
-* Mahsulotlarni ko‘radi
-* Savatchaga mahsulot qo‘shadi
-* Savatchada:
+kategoriyasi
 
-  * mahsulot nomlari
-  * har bir mahsulot soni
-  * umumiy summa chiqadi
+description
 
----
+stock (soni)
 
-## 🧠 Asosiy ish jarayoni (Qanday ishlaydi?)
+2️⃣ CUSTOMER (Xaridor)
 
-1. User ro‘yxatdan o‘tadi
-2. User roli belgilanadi (`SELLER` yoki `CUSTOMER`)
-3. Agar user SELLER bo‘lsa:
+Mahsulotlarni ko‘radi
 
-   * do‘kon yaratiladi
-   * mahsulotlar qo‘sha oladi
-4. Agar user CUSTOMER bo‘lsa:
+Savatchaga mahsulot qo‘shadi
 
-   * avtomatik savatcha yaratiladi
-   * mahsulotlarni savatchaga qo‘shadi
-5. CUSTOMER savatchani ko‘radi va umumiy narx hisoblanadi
+Savatcha:
 
----
+mahsulot nomlari
 
-## 🗂️ Ma’lumotlar bazasi jadvallari
+har bir mahsulot soni
 
-### 1️⃣ users
+umumiy summa hisoblanadi
 
-Barcha foydalanuvchilar
+🧠 Ish jarayoni (flow)
 
-| field      | izoh              |
-| ---------- | ----------------- |
-| id         | primary key       |
-| username   | unique            |
-| email      | unique            |
-| password   | hashed            |
-| role       | SELLER / CUSTOMER |
-| created_at | datetime          |
+User ro‘yxatdan o‘tadi (email + telefon + password)
 
----
+User roli belgilanadi (SELLER yoki CUSTOMER)
 
-### 2️⃣ sellers
+Agar SELLER bo‘lsa:
 
-Faqat sotuvchilar uchun
+Do‘kon yaratiladi
 
-| field     | izoh        |
-| --------- | ----------- |
-| id        | primary key |
-| user_id   | FK → users  |
-| shop_name | do‘kon nomi |
+Mahsulotlar qo‘shadi
 
-🔗 Aloqa: **1 User → 1 Seller**
+Agar CUSTOMER bo‘lsa:
 
----
+Avtomatik savatcha yaratiladi
 
-### 3️⃣ categories
+Mahsulotlarni savatchaga qo‘shadi
 
-Mahsulot kategoriyalari
+CUSTOMER savatchani ko‘radi va umumiy narx hisoblanadi
 
-| field | izoh        |
-| ----- | ----------- |
-| id    | primary key |
-| name  | unique      |
+CUSTOMER mahsulotga baho beradi (rating)
 
-🔗 Aloqa: **1 Category → ko‘p Product**
+💡 Service layer qat’iy qoidalarni tekshiradi.
 
----
+🗂️ Ma’lumotlar bazasi jadvallari
+1️⃣ users
+field	izoh
+id	primary key
+username	unique, optional
+email	unique, login uchun
+phone	unique, login uchun
+password	hashed
+role	SELLER / CUSTOMER
+is_active	boolean
+created_at	datetime
 
-### 4️⃣ products
+✅ Har bir user email va telefon orqali login qilishi mumkin.
 
-Sotiladigan mahsulotlar
+2️⃣ sellers
+field	izoh
+id	primary key
+user_id	FK → users
+shop_name	unique
 
-| field       | izoh            |
-| ----------- | --------------- |
-| id          | primary key     |
-| name        | mahsulot nomi   |
-| price       | narx            |
-| description | qisqa tavsif    |
-| stock       | soni            |
-| seller_id   | FK → sellers    |
-| category_id | FK → categories |
-| created_at  | datetime        |
+🔗 1 User → 1 Seller
 
----
+3️⃣ categories
+field	izoh
+id	primary key
+name	unique
 
-### 5️⃣ carts
+🔗 1 Category → ko‘p Product
 
-Xaridor savatchasi
+4️⃣ products
+field	izoh
+id	primary key
+name	mahsulot nomi
+price	narx
+description	qisqa tavsif
+stock	soni
+seller_id	FK → sellers
+category_id	FK → categories
+created_at	datetime
 
-| field   | izoh        |
-| ------- | ----------- |
-| id      | primary key |
-| user_id | FK → users  |
+🔗 1 Seller → ko‘p Product
+🔗 1 Category → ko‘p Product
 
-🔗 Aloqa: **1 User → 1 Cart**
+5️⃣ carts
+field	izoh
+id	primary key
+user_id	FK → users
 
----
+🔗 1 User → 1 Cart
 
-### 6️⃣ cart_items
+6️⃣ cart_items
+field	izoh
+id	primary key
+cart_id	FK → carts
+product_id	FK → products
+quantity	nechta
 
-Savatchadagi mahsulotlar
+🔗 1 Cart → ko‘p CartItem
+🔗 1 Product → ko‘p CartItem
 
-| field      | izoh          |
-| ---------- | ------------- |
-| id         | primary key   |
-| cart_id    | FK → carts    |
-| product_id | FK → products |
-| quantity   | nechta        |
+7️⃣ ratings
+field	izoh
+id	primary key
+user_id	FK → users (CUSTOMER)
+product_id	FK → products
+score	1–5
+comment	ixtiyoriy
+created_at	datetime
 
----
+🔒 Qoidalar:
 
-### 7️⃣ ratings
+Faqat CUSTOMER baho qo‘ya oladi
 
-Mahsulot baholari (rating)
+Bitta user bitta productga faqat 1 marta rating beradi
 
-| field      | izoh                  |
-| ---------- | --------------------- |
-| id         | primary key           |
-| user_id    | FK → users (CUSTOMER) |
-| product_id | FK → products         |
-| score      | 1–5                   |
-| comment    | ixtiyoriy             |
-| created_at | datetime              |
+🔐 Qat’iy qoidalar (Service layer’da tekshirish)
 
-🔒 **Qoidalar**:
+❌ CUSTOMER mahsulot yaratolmaydi
 
-* Faqat CUSTOMER baho qo‘ya oladi
-* Bitta user bitta productga faqat **1 marta** rating beradi
+❌ SELLER savatchaga mahsulot qo‘sha olmaydi
 
----
+❌ SELLER rating qo‘ya olmaydi
 
-## 🔐 Qat’iy qoidalar (Juda muhim)
+❌ Bitta productga 1 user 2 marta rating bera olmaydi
 
-Bularni **service layer’da tekshirishing shart**:
+❌ Stock yetarli bo‘lmasa savatchaga qo‘shilmaydi
 
-* ❌ CUSTOMER mahsulot yarata olmaydi
-* ❌ SELLER savatchaga mahsulot qo‘sha olmaydi
-* ❌ SELLER rating qo‘ya olmaydi
-* ❌ Bitta productga 1 user 2 marta rating bera olmaydi
-* ❌ Stock yetarli bo‘lmasa savatchaga qo‘shilmaydi
+🧪 Step-by-step vazifalar
+1️⃣ ORM modellarni yaratish
 
----
+Yuqoridagi 7 ta jadval uchun SQLAlchemy model
 
-## 🧪 ANIQLASHTIRILGAN VAZIFALAR (STEP-BY-STEP)
+ForeignKey va relationship’larni belgilash
 
-### ✅ 1-qadam: ORM modellarni yoz
+2️⃣ UserService
 
-* Yuqoridagi **7 ta jadval** uchun model yoz
-* `ForeignKey` va `relationship` ishlat
+create_user(email, phone, password, role) → hash password
 
----
+get_user_by_email(email) / get_user_by_phone(phone)
 
-### ✅ 2-qadam: User logikasini yoz
+activate_user(id) / deactivate_user(id)
 
-* User yaratish
-* User rolini tekshirish
+Role va login uchun email + telefonni tekshirish
 
----
+3️⃣ ProductService
 
-### ✅ 3-qadam: Product qo‘shish
-
-```python
 create_product(seller_user, name, price, category_id, description, stock)
-```
 
-✔️ Faqat SELLER ishlata oladi
+Faqat SELLER qo‘shishi mumkin
 
----
+update_stock(product_id, quantity)
 
-### ✅ 4-qadam: Savatchaga qo‘shish
+list_products(category_id=None, seller_id=None)
 
-```python
+4️⃣ CartService
+
 add_to_cart(customer_user, product_id, quantity)
-```
 
-✔️ Agar product allaqachon bo‘lsa → quantity oshadi
-❌ Agar stock yetarli bo‘lmasa → xato
+Agar product allaqachon bo‘lsa → quantity oshadi
 
----
+Stock yetarli bo‘lmasa → xato
 
-### ✅ 5-qadam: Savatchani ko‘rish
+remove_from_cart(customer_user, product_id)
 
-```python
-get_cart_summary(customer_user)
-```
+get_cart_summary(customer_user) → total price
 
-Natija:
+5️⃣ RatingService
 
-```text
-Laptop x2 = 2000
-Mouse  x1 = 50
-----------------
-Total: 2050
-```
-
----
-
-### ✅ 6-qadam: Rating qo‘yish
-
-```python
 rate_product(customer_user, product_id, score, comment)
-```
 
----
+Faqat CUSTOMER
 
-## 📁 Project fayl strukturasi
+1 productga 1 user 1 marta
 
-```
+📁 Fayl strukturasi
 marketplace/
 ├── database/
 │   ├── base.py
@@ -256,29 +218,32 @@ marketplace/
 │   └── rating.py
 │
 ├── services/
+│   ├── user_service.py
 │   ├── product_service.py
 │   ├── cart_service.py
 │   └── rating_service.py
 │
 ├── main.py
 └── README.md
-```
 
----
+🚀 Nima o‘rganasiz?
 
-## 🧭 Bu loyiha orqali nimani o‘rganasan?
+SQLAlchemy ORM asoslari
 
-* SQLAlchemy ORM asoslari
-* One-to-Many relationship
-* Real biznes qoidalarini kodga o‘tkazish
-* Toza loyiha strukturasi
+One-to-Many & One-to-One relationship
 
----
+Real biznes qoidalarini kodga o‘tkazish
 
-## 🚀 Keyingi qadamlar (keyinroq)
+Toza loyiha strukturasini yaratish
 
-* Order qo‘shish
-* Rating o‘rtacha bahosini hisoblash
-* Product filter va search
+Junior → Mid-level backend transition uchun tayyor base
 
----
+🌟 Future roadmap
+
+Order qo‘shish (checkout)
+
+Rating o‘rtacha bahosini hisoblash
+
+Product filter va search
+
+JWT auth + login token

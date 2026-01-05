@@ -1,10 +1,3 @@
-# practice_mini_shop_ormZo‘r, endi juda to‘g‘ri yo‘ldasan 👍
-Bu **birinchi loyiha** ekanini hisobga olib, quyida **ortiqcha murakkabliksiz**, lekin **real loyihaga o‘xshaydigan**, **ANIQ topshiriq** qilib beraman. Buni ko‘rib **nima qilishni bosqichma-bosqich tushunasan**.
-
-Quyidagini **to‘liq README.md** deb hisobla.
-
----
-
 # 📌 FIRST PROJECT: Mini Marketplace (Python ORM)
 
 ## 🎯 Loyihaning maqsadi
@@ -289,13 +282,3 @@ marketplace/
 * Product filter va search
 
 ---
-
-Agar xohlasang, keyingi bosqichda:
-
-* **har bir model uchun skeleton kod**
-* yoki **1-qadamdan 6-qadamgacha TODO checklist**
-* yoki **eng ko‘p qilinadigan xatolar**
-
-chiqib beraman.
-
-Bu loyiha **birinchi loyiha uchun IDEAL** 🔥

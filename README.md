@@ -1,0 +1,1 @@
+# practice_mini_shop_orm
